@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Konachan Utility beta</title>
+
+	<link rel="stylesheet" href="./css/jquery.flipster.min.css">
+	<link rel="stylesheet" href="./css/styles.css">
+	<link rel="stylesheet" href="./css/image-menu.css">
+
+</head>
+<body>
+
+	<div class="full-image">
+		<img id="large-image"/>
+		<div id="tag-container">
+			<ul class="tags">
+			</ul>
+		</div>
+		<div>
+			<!--ul id="nav">
+				<li><img src="img/actionIcons/barchart.png" onclick="showStats()"/></li>
+				<li><img src="img/actionIcons/download.png" onclick="download()"/></li>
+				<li><img src="img/actionIcons/star.png" onclick="rate()"/></li>
+				<li><img src="img/actionIcons/crop.png" onclick="cropAndCopy()"/></li>
+			</ul-->
+		</div>
+		<div class="image-menu">
+			<img id="delay1" src="img/actionIcons/barchart.png" onclick="showStats()"/>
+			<img id="delay2" src="img/actionIcons/download.png" onclick="download()"/>
+			<img id="delay3" src="img/actionIcons/star.png" onclick="rate()"/>
+			<img id="delay4" src="img/actionIcons/crop.png" onclick="cropAndCopy()"/>
+			<span onclick="openPictureMenu()">+</span>
+		</div>
+	</div>
+
+	<div class="page-header">
+		<img src="img/logoText.png" class="logo-image"/>
+		<span>::</span>
+		<span id="cur-path" style="width: 300px" onclick="quickTagSearch()">MAIN</span>
+		<input id="quick-search" type="text">
+	</div>
+
+	<div class="side-menu">
+		<div id="loadnew" class="button active" onclick="loadNew()">
+			<img src="img/star.png"/>
+		</div>
+		<div class="button">
+			<img src="img/flame.png"/>
+		</div>
+		<div class="button">
+			<img src="img/memorycard.png"/>
+		</div>
+		<div class="button" style="margin-top:40px">
+			<img src="img/magnifyingglass.png"/>
+		</div>
+		<div class="button" style="position: absolute; bottom: 90px;">
+			<img src="img/settings.png"/>
+		</div>
+	</div>
+
+	<div style="margin-left: 80px;">
+		<div class="scroller">
+			<div id="no-internet">
+				<span style="font-size: 25px">Connection error</span><br>
+				<span style="font-size: 18px">Can't access the network right now</span>
+			</div>
+			<div id="content-loader">
+				<div class="double-bounce1"></div>
+				<div class="double-bounce2"></div>
+			</div>
+			<div class="grid">
+				<div class="grid-sizer"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="spinner">
+		<div class="double-bounce1"></div>
+		<div class="double-bounce2"></div>
+	</div>
+
+	<script src="./app/jquery.min.js"></script>
+	<script src="./app/masonry.min.js"></script>
+	<script src="./app/smooth-scroll.js"></script>
+	<!--script src="./app/ferroMenu-1.2.3.min.js"></script-->
+	<script src="./app/core/script.js"></script>
+
+	<script src="./node_modules/jquery-lazyload/jquery.lazyload.js"></script>
+
+</body>
+</html>

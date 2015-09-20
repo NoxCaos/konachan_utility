@@ -1,0 +1,25 @@
+{
+  "name": "konachan-utility",
+  "version": "0.1.0",
+  "description": "Image manager and syncer for konachan.com",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no input file specified\" && exit 1"
+  },
+  "author": "NoxCaos",
+  "window": {
+    "toolbar": true,
+    "icon": "appIcon.png",
+    "width": 900,
+    "height": 600,
+    "min_height": 500,
+    "min_width": 600
+  },
+  "license": "GPL",
+  "dependencies": {
+    "nedb": "^1.2.0",
+    "pretty-bytes": "^1.0.2",
+    "request": "^2.61.0",
+    "userhome": "^1.0.0"
+  }
+}
