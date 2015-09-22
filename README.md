@@ -7,7 +7,7 @@ API help here: http://konachan.com/help/api
 2. Download and extract zip repo, or use git clone
 3. Run <pre>npm install</pre> to install all packages from json file
 4. Download and extract NWJS http://nwjs.io/
-5. Run <pre>path/to/nwjs.exe path/to/KonachanUtil</pre>
+5. Run <pre>path/to/nw.exe path/to/konachan_utility-master</pre>
 
 The browser panel is enabled by default. You can edit app params in package.json file.
 
@@ -17,3 +17,6 @@ The browser panel is enabled by default. You can edit app params in package.json
 3. Add ratings
 4. Add local DB and store downloaded images data in it
 5. Make a sync of local data with user's konachan favorites
+6. Add other categories
+7. Add local image browser
+8. Add advanced search
