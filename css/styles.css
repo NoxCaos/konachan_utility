@@ -191,6 +191,14 @@ div.page-header .logo-image {
 	width: auto;
 	float: left;
     margin: 10px, 10px;
+    -webkit-transition : all 0.1s ease-out;
+}
+
+div.page-header .logo-image:hover {
+    cursor: pointer;
+    opacity: .8;
+    -webkit-filter: grayscale(1);
+    -webkit-transform: scale(.9, .9);
 }
 
 div.page-header span {
@@ -206,7 +214,7 @@ div.page-header span:hover {
 
 div.page-header input[type="text"] {
   top: 15px;
-  left: 345px;
+  left: 445px;
   position: absolute;
   width: 250px;
   font-size: 25px;
