@@ -20,21 +20,29 @@
 			<ul class="tags">
 			</ul>
 		</div>
-		<div>
-			<!--ul id="nav">
-				<li><img src="img/actionIcons/barchart.png" onclick="showStats()"/></li>
-				<li><img src="img/actionIcons/download.png" onclick="download()"/></li>
-				<li><img src="img/actionIcons/star.png" onclick="rate()"/></li>
-				<li><img src="img/actionIcons/crop.png" onclick="cropAndCopy()"/></li>
-			</ul-->
+
+		<div class="download-progress">
+		    <div class="circle">
+		        <div class="mask full">
+		            <div class="fill"></div>
+		        </div>
+		        <div class="mask half">
+		            <div class="fill"></div>
+		            <div class="fill fix"></div>
+		        </div>
+		        <div class="shadow"></div>
+		    </div>
 		</div>
-		<div class="image-menu">
+
+		<!--img class="download-progress" src="img/actionIcons/download.png"/-->
+		<img class="download-button" src="img/actionIcons/download.png" onclick="download()"/>
+
+		<!--div class="image-menu">
 			<img id="delay1" src="img/actionIcons/barchart.png" onclick="showStats()"/>
 			<img id="delay2" src="img/actionIcons/download.png" onclick="download()"/>
 			<img id="delay3" src="img/actionIcons/star.png" onclick="rate()"/>
-			<img id="delay4" src="img/actionIcons/crop.png" onclick="cropAndCopy()"/>
 			<span onclick="openPictureMenu()">+</span>
-		</div>
+		</div-->
 	</div>
 
 	<div class="page-header">
@@ -86,7 +94,6 @@
 	<script src="./app/jquery.min.js"></script>
 	<script src="./app/masonry.min.js"></script>
 	<script src="./app/smooth-scroll.js"></script>
-	<!--script src="./app/ferroMenu-1.2.3.min.js"></script-->
 	<script src="./app/core/script.js"></script>
 
 	<script src="./node_modules/jquery-lazyload/jquery.lazyload.js"></script>

@@ -17,11 +17,12 @@
   },
   "license": "GPL",
   "dependencies": {
+    "jquery-lazyload": "1.9.7",
+    "jquery.flipster": "1.1.2",
     "nedb": "^1.2.0",
     "pretty-bytes": "^1.0.2",
     "request": "^2.61.0",
-    "userhome": "^1.0.0",
-    "jquery-lazyload": "1.9.7",
-    "jquery.flipster": "1.1.2"
+    "request-progress": "^3.0.0",
+    "userhome": "^1.0.0"
   }
 }

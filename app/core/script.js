@@ -3,14 +3,18 @@ var gui = require('nw.gui');
 var fs = require('fs');
 var userhome = require('userhome');
 var request = require('request');
+var progress = require('request-progress');
 
-var baseUrl = 'http://konachan.com/';
-var modes = {
-    newest: "post.json?",
-    popular: "post/popular_recent.json?",
-    loacal: "post.json?"
+var curServer = 'konachan';
+var servers = {
+    'konachan': 'http://konachan.com/',
+    'danbooru': 'https://danbooru.donmai.us/'
 }
-var curType = modes.newest;
+var modes = {
+    'konachan': 'post.json?',
+    'danbooru': 'posts.json?'
+}
+var curType = modes[curServer];
 var curTags;
 var curItem;
 var safemode = true;
@@ -31,6 +35,8 @@ var $grid = grid.masonry({
         columnWidth: '.grid-sizer',
         percentPosition: true,
     });
+var dlActive = false;
+var clipboard = gui.Clipboard.get();
 
 $(document).ready(function(){
 
@@ -52,7 +58,7 @@ $(document).ready(function(){
         }
     });
 
-    loadNextPage(modes.newest);
+    loadNextPage(modes[curServer]);
 });
 
 function loadNextPage(type, tags){
@@ -64,12 +70,13 @@ function loadNextPage(type, tags){
         tagString += tags[i];
     }
 
-    var path = baseUrl + type 
+    var path = servers[curServer] + type 
     + ((safemode || tags != undefined)? 'tags=':'')
     + ((safemode)? 'rating%3As':'') 
     + tagString
     + '&page=' + page;
 
+    console.log(path);
     request(path, function(error, response, body){
         
         if (error) {
@@ -147,7 +154,8 @@ function loadImagePreview(e){
     image.lazyload();
 
     image.click(function(){
-        notifyBar('info', 'Right click to close');
+        notifyBar('info', 'Copied to clipboard');
+        clipboard.set('http:' + e.data.sample_url, 'text');
     });
 
     var tags = e.data.tags.split(" ");
@@ -182,7 +190,7 @@ function searchByTag(tag){
     curTags = [tag];
     path.empty();
     path.append(tag);
-    loadNextPage(modes.newest, curTags);
+    loadNextPage(modes[curServer], curTags);
     removeSidebarActiveState();
 }
 
@@ -231,7 +239,7 @@ function loadNew() {
     page = 1;
     loading = true;
     resetGrid();
-    loadNextPage(modes.newest);
+    loadNextPage(modes[curServer]);
     path.empty();
     path.append('MAIN');
 
@@ -264,27 +272,55 @@ function rate() {
 }
 
 function download() {
-    var pics = userhome('Pictures');
-    fs.exists(pics + '/KonachanImages', function(exists){
-        pics += '/KonachanImages';
-        if(!exists) fs.mkdirSync(pics);
+    if(!dlActive){
+        var pics = userhome('Pictures');
+        fs.exists(pics + '/KonachanImages', function(exists){
+            pics += '/KonachanImages';
+            if(!exists) fs.mkdirSync(pics);
 
-        var filename = "/Konachan.com - " + curItem.id + ".png";
-        var file = fs.createWriteStream(pics + filename);
+            var filename = "/Konachan.com - " + curItem.id + ".png";
+            var file = fs.createWriteStream(pics + filename);
 
-        request('http:' + curItem.file_url).pipe(file).on('close', function(err){
-            if(err) notifyBar('error', 'Error occure while saving image: ' + err);
-            else notifyBar('success', 'Image ' + curItem.id + ' was saved');
+            $('.download-button').addClass('active');
+            $('.download-progress').addClass('active');
+            dlActive = true;
+
+            progress(request('http:' + curItem.file_url), { 
+                throttle: 50,
+            })
+            .on('progress', function (state) {
+                updateProgress(state.percent);
+            })
+            .pipe(file)
+            .on('close', function(err){
+                if(err) notifyBar('error', 'Error occure while saving image: ' + err);
+                else notifyBar('success', 'Image ' + curItem.id + ' was saved');
+
+                $('.download-progress').removeClass('active');
+                updateProgress(1);
+                setTimeout(function(){ 
+                    $('.download-button').removeClass('active');
+                    dlActive = false;
+                    updateProgress(0); 
+                }, 500);
+            });
         });
-    });
+    }
 }
 
-function showStats() {
-
+var transform_styles = ['-webkit-transform', 'transform'];
+function updateProgress(prog) {
+    var rotation = clamp(Math.floor(prog * 180), 0, 180);
+    var fill_rotation = rotation;
+    var fix_rotation = rotation * 2;
+    for (i in transform_styles) {
+        $('.circle .fill, .circle .mask.full').css(transform_styles[i], 'rotate(' + fill_rotation + 'deg)');
+        $('.circle .fill.fix').css(transform_styles[i], 'rotate(' + fix_rotation + 'deg)');
+    }
 }
 
-function cropAndCopy() {
-
+function clamp(num, min, max) {
+  return num <= min ? min : num >= max ? max : num;
 }
 
 $('.scroller').scroll(function() {

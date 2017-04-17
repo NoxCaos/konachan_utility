@@ -111,25 +111,11 @@ img{
 	}
 }
 
-@media screen and ( min-width: 1300px ) {
-	.grid-item,
-	.grid-sizer {
-		width: 20%;
-	}
-}
-
 @media screen and ( min-width: 1600px ) {
-	.grid-item,
-	.grid-sizer {
-		width: 16%;
-	}
-}
-
-@media screen and ( min-width: 1900px ) {
-	.grid-item,
-	.grid-sizer {
-		width: 14%;
-	}
+    .grid-item,
+    .grid-sizer {
+        width: 20%;
+    }
 }
 
 div.text-content {
@@ -157,24 +143,6 @@ div.text-content span {
 }
 
 /*Page header*/
-
-/*div.page-header {
-	width: 100%;
-	height: 80px;
-	opacity: .9;
-	position: fixed;
-	background-color: #000;
-	z-index: 10;
-}*/
-
-/*div.page-header {
-    width: 100%;
-    height: 76px;
-    position: fixed;
-    background-color: #ee8887;
-    z-index: 10;
-    box-shadow: 0px 4px 0 0 #B06464;
-}*/
 
 div.page-header {
     width: 100%;
@@ -418,6 +386,71 @@ div.full-image img {
     color: white;
     text-align: center;
     box-shadow: 0px 2px 0 0 #3A5494;
+}
+
+/*Download*/
+
+.download-progress {
+    width: 60px !important;
+    height: 60px !important;
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    -webkit-transition : all 0.5s ease-out;
+}
+
+.download-progress .circle .mask, .fill, .shadow {
+    width: 60px !important;
+    height: 60px !important;
+    position: absolute;
+    border-radius: 50%;
+}
+    
+.download-progress .circle .mask, .fill {
+    -webkit-backface-visibility: hidden;
+    -webkit-transition : all 0.1s ease-out;
+}
+
+.download-progress .circle .mask {
+    clip: rect(0px, 60px, 60px, 30px);
+}
+
+.download-progress .circle .mask .fill {
+    clip: rect(0px, 30px, 60px, 0px);
+    background-color: #C75C5C;
+}
+
+.download-progress.active {
+    -webkit-transform: scale(1.5);
+}
+
+.download-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 70px !important;
+    height: 70px !important;
+    -webkit-transition : all 0.1s ease-out;
+}
+
+.download-button.active {
+    -webkit-filter: grayscale(1);
+    -webkit-transform: scale(1);
+}
+
+.download-button:hover {
+    -webkit-transform: scale(1.2);
+    cursor: pointer;
+}
+
+.download-button.active:hover {
+    -webkit-transform: scale(1);
+    cursor: default;
+}
+
+.download-progress img {
+    width: 100%;
+    height: 100%;
 }
 
 /*Loader*/
