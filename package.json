@@ -10,8 +10,8 @@
   "window": {
     "toolbar": true,
     "icon": "appIcon.png",
-    "width": 900,
-    "height": 600,
+    "width": 1500,
+    "height": 1000,
     "min_height": 500,
     "min_width": 600
   },
@@ -20,6 +20,8 @@
     "nedb": "^1.2.0",
     "pretty-bytes": "^1.0.2",
     "request": "^2.61.0",
-    "userhome": "^1.0.0"
+    "userhome": "^1.0.0",
+    "jquery-lazyload": "1.9.7",
+    "jquery.flipster": "1.1.2"
   }
 }

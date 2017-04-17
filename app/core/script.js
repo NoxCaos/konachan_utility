@@ -95,7 +95,7 @@ function loadNextPage(type, tags){
                 var img = $('<img>');
                 var text = $('<div></div>');
 
-                img.attr( 'src', item.preview_url );
+                img.attr( 'src', 'http:' + item.preview_url );
                 img.attr( 'data-info', 'some-info' );
 
                 text.attr('class', 'text-content');
@@ -142,8 +142,8 @@ function loadImagePreview(e){
     scrollto = $('.scroller').scrollTop();
     windoWidth = $('.scroller').width;
 
-    image.attr('src', e.data.preview_url);
-    image.attr('data-original', e.data.sample_url);
+    image.attr('src', 'http:' + e.data.preview_url);
+    image.attr('data-original', 'http:' + e.data.sample_url);
     image.lazyload();
 
     image.click(function(){
@@ -272,7 +272,7 @@ function download() {
         var filename = "/Konachan.com - " + curItem.id + ".png";
         var file = fs.createWriteStream(pics + filename);
 
-        request(curItem.file_url).pipe(file).on('close', function(err){
+        request('http:' + curItem.file_url).pipe(file).on('close', function(err){
             if(err) notifyBar('error', 'Error occure while saving image: ' + err);
             else notifyBar('success', 'Image ' + curItem.id + ' was saved');
         });
