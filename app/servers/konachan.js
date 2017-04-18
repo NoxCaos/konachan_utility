@@ -1,6 +1,7 @@
 module.exports = {
 
     getRequestUrl:function (tagString, page) {
+        console.log(window.baseUrl);
         var path = window.baseUrl + 'post.json?' 
             + ((window.safemode || tagString != undefined)? 'tags=':'')
             + ((window.safemode)? 'rating%3As':'') 
@@ -14,15 +15,15 @@ module.exports = {
     },
 
     getPreviewUrl:function (item) {
-        return item.preview_url;
+        return 'http:' + item.preview_url;
     },
 
     getSampleUrl:function (item) {
-        return item.sample_url;
+        return 'http:' + item.sample_url;
     },
 
     getLargeFileUrl:function (item) {
-        return item.file_url;
+        return 'http:' + item.file_url;
     },
 
     getResolution:function (item) {

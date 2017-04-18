@@ -1,14 +1,12 @@
-var baseUrl = 'https://danbooru.donmai.us';
-var safemode = true;
-
 module.exports = {
 
     getRequestUrl:function (tagString, page) {
-        var path = baseUrl + '/posts.json?' 
-            + ((safemode || tagString != undefined)? 'tags=':'')
-            + ((safemode)? 'rating%3As':'') 
+        var path = window.baseUrl + '/posts.json?' 
+            + ((window.safemode || tagString != undefined)? 'tags=':'')
+            + ((window.safemode)? 'rating%3As':'') 
             + tagString
             + '&page=' + page;
+            console.log(path);
         return path;
     },
 
@@ -17,15 +15,15 @@ module.exports = {
     },
 
     getPreviewUrl:function (item) {
-        return baseUrl + item.preview_file_url;
+        return window.baseUrl + item.preview_file_url;
     },
 
     getSampleUrl:function (item) {
-        return baseUrl + item.file_url;
+        return window.baseUrl + item.file_url;
     },
 
     getLargeFileUrl:function (item) {
-        return baseUrl + item.large_file_url;
+        return window.baseUrl + item.large_file_url;
     },
 
     getResolution:function (item) {

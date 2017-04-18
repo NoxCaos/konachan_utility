@@ -5,16 +5,18 @@ var userhome = require('userhome');
 var request = require('request');
 var progress = require('request-progress');
 
-var curServer = 'danbooru';
+window.baseUrl = 'http://konachan.com/';
+window.safemode = true;
+var curServer = 'konachan';
 var servers = {
+    'konachan': require(fs.realpathSync('.') + '\\app\\servers\\konachan'),
     'moebooru': require(fs.realpathSync('.') + '\\app\\servers\\moebooru'),
     'danbooru': require(fs.realpathSync('.') + '\\app\\servers\\danbooru'),
 }
 
 var curTags;
 var curItem;
-var safemode = true;
-
+var curColor = "EE8887"
 var page = 1;
 var newItems = 0;
 var loadedItems = 0;
@@ -67,7 +69,6 @@ function loadNextPage(tags){
         tagString += tags[i];
     }
 
-    console.log(servers[curServer]);
     var path = servers[curServer].getRequestUrl(tagString, page);
     request(path, function(error, response, body){
         
@@ -314,6 +315,19 @@ function toggleServerWindow() {
 function closeServerWindow() {
     $('.server-dropdown').removeClass('active');
     serverListOpen = false;
+}
+
+function changeServer(engine, url, safe, color, id) {
+    baseUrl = url;
+    safeMode = safe;
+    curServer = engine;
+    curColor = color;
+    page = 1;
+    closeServerWindow();
+    loadNew();
+
+    $(".page-header .logo-image").attr('src', $("#" + id).attr('src'));
+    $(".page-header").css("background-color", "#" + color);
 }
 
 var transform_styles = ['-webkit-transform', 'transform'];
