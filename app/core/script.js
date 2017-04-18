@@ -5,16 +5,12 @@ var userhome = require('userhome');
 var request = require('request');
 var progress = require('request-progress');
 
-var curServer = 'konachan';
+var curServer = 'danbooru';
 var servers = {
-    'konachan': 'http://konachan.com/',
-    'danbooru': 'https://danbooru.donmai.us/'
+    'moebooru': require(fs.realpathSync('.') + '\\app\\servers\\moebooru'),
+    'danbooru': require(fs.realpathSync('.') + '\\app\\servers\\danbooru'),
 }
-var modes = {
-    'konachan': 'post.json?',
-    'danbooru': 'posts.json?'
-}
-var curType = modes[curServer];
+
 var curTags;
 var curItem;
 var safemode = true;
@@ -36,6 +32,7 @@ var $grid = grid.masonry({
         percentPosition: true,
     });
 var dlActive = false;
+var serverListOpen = false;
 var clipboard = gui.Clipboard.get();
 
 $(document).ready(function(){
@@ -58,10 +55,10 @@ $(document).ready(function(){
         }
     });
 
-    loadNextPage(modes[curServer]);
+    loadNextPage();
 });
 
-function loadNextPage(type, tags){
+function loadNextPage(tags){
     var tagString = '';
     loadBar.show();
     
@@ -70,13 +67,8 @@ function loadNextPage(type, tags){
         tagString += tags[i];
     }
 
-    var path = servers[curServer] + type 
-    + ((safemode || tags != undefined)? 'tags=':'')
-    + ((safemode)? 'rating%3As':'') 
-    + tagString
-    + '&page=' + page;
-
-    console.log(path);
+    console.log(servers[curServer]);
+    var path = servers[curServer].getRequestUrl(tagString, page);
     request(path, function(error, response, body){
         
         if (error) {
@@ -101,23 +93,25 @@ function loadNextPage(type, tags){
 
                 var img = $('<img>');
                 var text = $('<div></div>');
+                var cont = $('<div></div>');
 
-                img.attr( 'src', 'http:' + item.preview_url );
+                img.attr( 'src', servers[curServer].getPreviewUrl(item) );
                 img.attr( 'data-info', 'some-info' );
 
                 text.attr('class', 'text-content');
                 text.append($('<span style="font-size: 20px">' 
-                    + item.width +'x'+ item.height 
+                    + servers[curServer].getResolution(item)
                     + '</span><br><span>'
-                    + item.tags
+                    + servers[curServer].getTags(item)
                     + '</span>'));
 
+                cont.attr('class', 'container');
+
                 var gridItem = $('<div></div>');
-                gridItem.append(img);
-                gridItem.append(text);
+                cont.append(img);
+                cont.append(text);
+                gridItem.append(cont);
                 gridItem.attr('class', 'grid-item');
-                //gridItem.attr('style', 'height: '
-                //    + item.actual_preview_height + ';');
                 gridItem.click(item, loadImagePreview);
                 newItems+=1;
 
@@ -149,16 +143,16 @@ function loadImagePreview(e){
     scrollto = $('.scroller').scrollTop();
     windoWidth = $('.scroller').width;
 
-    image.attr('src', 'http:' + e.data.preview_url);
-    image.attr('data-original', 'http:' + e.data.sample_url);
+    image.attr('src', servers[curServer].getPreviewUrl(e.data));
+    image.attr('data-original', servers[curServer].getSampleUrl(e.data));
     image.lazyload();
 
     image.click(function(){
         notifyBar('info', 'Copied to clipboard');
-        clipboard.set('http:' + e.data.sample_url, 'text');
+        clipboard.set(servers[curServer].getSampleUrl(e.data), 'text');
     });
 
-    var tags = e.data.tags.split(" ");
+    var tags = servers[curServer].getTags(e.data).split(" ");
     tagContainer.empty();
 
     for(var i in tags) {
@@ -181,6 +175,8 @@ function loadImagePreview(e){
     
     grid.fadeTo(0, 0)
     grid.hide();
+
+    closeServerWindow();
 }
 
 function searchByTag(tag){
@@ -190,7 +186,7 @@ function searchByTag(tag){
     curTags = [tag];
     path.empty();
     path.append(tag);
-    loadNextPage(modes[curServer], curTags);
+    loadNextPage(curTags);
     removeSidebarActiveState();
 }
 
@@ -239,7 +235,7 @@ function loadNew() {
     page = 1;
     loading = true;
     resetGrid();
-    loadNextPage(modes[curServer]);
+    loadNextPage();
     path.empty();
     path.append('MAIN');
 
@@ -274,18 +270,19 @@ function rate() {
 function download() {
     if(!dlActive){
         var pics = userhome('Pictures');
-        fs.exists(pics + '/KonachanImages', function(exists){
-            pics += '/KonachanImages';
+        fs.exists(pics + '/MultichanImages/', function(exists){
+            pics += '/MultichanImages/';
             if(!exists) fs.mkdirSync(pics);
 
-            var filename = "/Konachan.com - " + curItem.id + ".png";
+            var filename = curServer + " - " + servers[curServer].getID(curItem) + ".png";
             var file = fs.createWriteStream(pics + filename);
 
             $('.download-button').addClass('active');
             $('.download-progress').addClass('active');
             dlActive = true;
 
-            progress(request('http:' + curItem.file_url), { 
+            console.log(servers[curServer].getLargeFileUrl(curItem));
+            progress(request(servers[curServer].getLargeFileUrl(curItem)), { 
                 throttle: 50,
             })
             .on('progress', function (state) {
@@ -294,7 +291,7 @@ function download() {
             .pipe(file)
             .on('close', function(err){
                 if(err) notifyBar('error', 'Error occure while saving image: ' + err);
-                else notifyBar('success', 'Image ' + curItem.id + ' was saved');
+                else notifyBar('success', 'Image ' + servers[curServer].getID(curItem) + ' was saved');
 
                 $('.download-progress').removeClass('active');
                 updateProgress(1);
@@ -306,6 +303,17 @@ function download() {
             });
         });
     }
+}
+
+function toggleServerWindow() {
+    if(serverListOpen) $('.server-dropdown').removeClass('active');
+    else $('.server-dropdown').addClass('active');
+    serverListOpen = !serverListOpen;
+}
+
+function closeServerWindow() {
+    $('.server-dropdown').removeClass('active');
+    serverListOpen = false;
 }
 
 var transform_styles = ['-webkit-transform', 'transform'];
@@ -324,11 +332,10 @@ function clamp(num, min, max) {
 }
 
 $('.scroller').scroll(function() {
-    if($('.scroller').scrollTop() + $('.scroller').height() >= grid.height() - 200) {
+    if($('.scroller').scrollTop() + $('.scroller').height() >= grid.height() - 500) {
         if(!loading){ 
             loading = true;
-            loadNextPage(curType, curTags);
-            console.log(page);
+            loadNextPage(curTags);
         }
     }
 });

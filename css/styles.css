@@ -72,6 +72,7 @@ img{
 .grid-item,
 .grid-sizer {
 	width: 100%;
+    max-height: 300px;
 }
 
 .grid-item {
@@ -79,15 +80,23 @@ img{
 	overflow: hidden;
 }
 
-.grid-item img {
-    padding-left: 4px;
+.grid-item .container {
+    margin: 0px 5px;
+    overflow: hidden;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.grid-item .container img {
+    width: 100%;
     object-fit: cover;
     -webkit-transition : all 0.15s ease-out;
 }
 
-.grid-item:hover > img{
+.grid-item:hover > .container img {
 	cursor: pointer;
-    transform: scale(1.3,1.3);
+    transform: scale(1.2,1.2);
 }
 
 @media screen and ( min-width: 400px ) {
@@ -131,11 +140,13 @@ div.text-content {
 	opacity: 0;
     text-align: center;
 	transition: opacity 500ms;
+    overflow: hidden;
 }
 
 div.text-content span {
     text-align: center;
     vertical-align: middle;
+    padding: 5px;
 }
 
 .grid .grid-item:hover div.text-content {
@@ -451,6 +462,59 @@ div.full-image img {
 .download-progress img {
     width: 100%;
     height: 100%;
+}
+
+/*Dropdown*/
+
+.server-dropdown {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 76px;
+    width: 300px;
+    height: 100%;
+    background-color: #222;
+    list-style: none;
+    z-index: 100;
+    margin: 0;
+    margin-right: -310px;
+    padding: 0;
+    -webkit-transition : all 0.3s ease-out;
+}
+
+.server-dropdown.active {
+    margin-right: 0px;
+}
+
+.server-dropdown li {
+    display: block;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.server-dropdown li img {
+    -webkit-filter: grayscale(1);
+    -webkit-transition : all 0.1s ease-out;
+}
+
+.server-dropdown li:hover > img {
+    cursor: pointer;
+    -webkit-filter: grayscale(0);
+    -webkit-transform: scale(1.2);
+}
+
+img.server-change {
+    width: 55px;
+    height: 55px;
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    -webkit-transition : all 0.2s ease-out;
+}
+
+img.server-change:hover {
+    -webkit-transform: scale(1.2);
+    cursor: pointer;
 }
 
 /*Loader*/

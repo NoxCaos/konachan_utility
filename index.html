@@ -48,9 +48,16 @@
 	<div class="page-header">
 		<img src="img/logoText2.png" class="logo-image" onclick="loadNew()"/>
 		<span>::</span>
-		<span id="cur-path" style="width: 300px" onclick="quickTagSearch()">MAIN</span>
+		<span id="cur-path" style="width: 300px" onclick="quickTagSearch()">click here to search</span>
 		<input id="quick-search" type="text">
+
+		<img class='server-change' src="img/settings.png" onclick="toggleServerWindow()">
 	</div>
+
+	<ul class="server-dropdown">
+		<li><img src="img/logoText.png"/></li>
+		<li><img src="img/logoText2.png"/></li>
+	</ul>
 
 	<!--div class="side-menu">
 		<div id="loadnew" class="button active" onclick="loadNew()">
